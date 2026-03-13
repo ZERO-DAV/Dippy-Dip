@@ -5,392 +5,505 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dippy Dip | ديبي ديب</title>
 
-<!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=IBM+Plex+Sans+Arabic:wght@300;400;600&family=Lora:ital@0;1&display=swap" rel="stylesheet">
-
-<!-- Icons: Font Awesome + Simple Icons -->
+<!-- Cairo: أفضل خط عربي للواجهات -->
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&family=Pacifico&family=Lora:ital@1&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <style>
-  :root {
-    --bg:       #faf6f1;
-    --pink:     #c9a882;
-    --rose:     #7c4f2f;
-    --lilac:    #d4b896;
-    --text:     #2c1a0e;
-    --muted:    #8a6e56;
-    --card:     #ffffff;
-    --border:   rgba(124,79,47,0.15);
-    --shadow:   rgba(124,79,47,0.10);
-  }
+:root {
+  --bg:        #fdf3e3;
+  --brown-1:   #3b1f0e;   /* dark – main accent */
+  --brown-2:   #5c3317;   /* medium */
+  --brown-3:   #a0673a;   /* light accent */
+  --cream:     #fdf7ef;
+  --text:      #2a1508;
+  --muted:     #7a5c44;
+  --card:      rgba(255,252,246,0.92);
+  --border:    rgba(59,31,14,0.13);
+  --shadow:    rgba(59,31,14,0.10);
+}
 
-  * { margin:0; padding:0; box-sizing:border-box; }
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
 
-  body {
-    font-family: 'IBM Plex Sans Arabic', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+body {
+  font-family: 'Cairo', sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-x: hidden;
+}
 
-  /* subtle dot pattern */
-  body::before {
-    content: '';
-    position: fixed; inset: 0; z-index: 0;
-    background-image: radial-gradient(circle, rgba(124,79,47,0.10) 1.5px, transparent 1.5px);
-    background-size: 28px 28px;
-    pointer-events: none;
-  }
+/* ─── solid cream background ─── */
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: 0;
+  pointer-events: none;
+  background: #fdf3e3;
+}
 
-  /* ── SPLASH ── */
-  #splash {
-    position: fixed; inset: 0; z-index: 100;
-    background: var(--bg);
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center; gap: 0;
-    transition: opacity .55s ease, visibility .55s;
-  }
-  #splash.gone { opacity: 0; visibility: hidden; pointer-events: none; }
+/* ─── subtle noise grain over gradient ─── */
+body::after {
+  content: '';
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+}
 
-  .splash-title {
-    font-family: 'Pacifico', cursive;
-    font-size: 3rem;
-    color: var(--rose);
-    margin-bottom: 6px;
-    animation: fadeUp .7s ease both;
-  }
-  .splash-sub {
-    font-size: .85rem;
-    color: var(--muted);
-    letter-spacing: 4px;
-    margin-bottom: 52px;
-    animation: fadeUp .7s .15s ease both;
-    opacity: 0;
-  }
-  .splash-label {
-    font-size: .78rem;
-    color: var(--muted);
-    margin-bottom: 20px;
-    animation: fadeUp .7s .25s ease both;
-    opacity: 0;
-  }
-  .splash-row {
-    display: flex; gap: 14px;
-    animation: fadeUp .7s .35s ease both;
-    opacity: 0;
-  }
-  .lang-btn {
-    padding: 13px 36px;
-    border-radius: 100px;
-    border: 1.5px solid var(--rose);
-    font-size: .95rem; font-weight: 600;
-    cursor: pointer;
-    transition: all .25s;
-    font-family: 'IBM Plex Sans Arabic', sans-serif;
-  }
-  .lang-btn-ar { background: var(--rose); color: #fff; }
-  .lang-btn-en { background: transparent; color: var(--rose); font-family: 'Lora', serif; }
-  .lang-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px var(--shadow); }
+/* ══════════════════════════════
+   PAGE LOADER
+══════════════════════════════ */
+#loader {
+  position: fixed; inset: 0; z-index: 200;
+  background: var(--brown-1);
+  display: flex; align-items: center; justify-content: center;
+  transition: opacity .5s ease, visibility .5s;
+}
+#loader.gone { opacity:0; visibility:hidden; pointer-events:none; }
 
-  /* ── MAIN ── */
-  #site {
-    display: none; flex-direction: column;
-    align-items: center; padding: 28px 24px 64px;
-    width: 100%; max-width: 440px;
-    position: relative; z-index: 1;
-  }
-  #site.on { display: flex; }
+.loader-ring {
+  width: 52px; height: 52px;
+  border: 3px solid rgba(253,247,239,.15);
+  border-top-color: var(--cream);
+  border-radius: 50%;
+  animation: spin .8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
 
-  /* top bar */
-  .topbar {
-    width: 100%; display: flex; justify-content: flex-end;
-    margin-bottom: 44px;
-  }
-  .lang-toggle {
-    background: none;
-    border: 1.5px solid var(--border);
-    border-radius: 100px;
-    padding: 7px 18px;
-    font-size: .75rem; font-weight: 600;
-    color: var(--muted); cursor: pointer;
-    transition: all .2s;
-    font-family: 'IBM Plex Sans Arabic', 'Lora', sans-serif;
-    letter-spacing: .5px;
-  }
-  .lang-toggle:hover { border-color: var(--rose); color: var(--rose); }
+/* ══════════════════════════════
+   SPLASH
+══════════════════════════════ */
+#splash {
+  position: fixed; inset: 0; z-index: 100;
+  background: var(--cream);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 0;
+  transition: opacity .5s ease, visibility .5s;
+}
+#splash.gone { opacity:0; visibility:hidden; pointer-events:none; }
 
-  /* hero */
-  .brand {
-    font-family: 'Pacifico', cursive;
-    font-size: 2.8rem;
-    color: var(--rose);
-    margin-bottom: 10px;
-    text-align: center;
-  }
-  .tagline {
-    font-family: 'Lora', serif;
-    font-style: italic;
-    font-size: .95rem;
-    color: var(--muted);
-    margin-bottom: 18px;
-    text-align: center;
-  }
-  .hours-pill {
-    display: inline-flex; align-items: center; gap: 8px;
-    background: #fff;
-    border: 1.5px solid var(--border);
-    border-radius: 100px;
-    padding: 8px 20px;
-    font-size: .78rem; font-weight: 600;
-    color: var(--text);
-    margin-bottom: 40px;
-    box-shadow: 0 2px 12px var(--shadow);
-  }
-  .dot {
-    width: 7px; height: 7px; border-radius: 50%;
-    background: #4ade80;
-    box-shadow: 0 0 0 0 rgba(74,222,128,.5);
-    animation: blink 2s infinite;
-    flex-shrink: 0;
-  }
-  @keyframes blink {
-    0%,100%{ box-shadow: 0 0 0 0 rgba(74,222,128,.5); }
-    50%    { box-shadow: 0 0 0 6px rgba(74,222,128,0); }
-  }
+.splash-brand {
+  font-family: 'Pacifico', cursive;
+  font-size: 3rem;
+  color: var(--brown-1);
+  margin-bottom: 6px;
+  animation: fadeUp .6s ease both;
+}
+.splash-ar {
+  font-family: 'Cairo', sans-serif;
+  font-size: 1.05rem; font-weight: 600;
+  color: var(--muted);
+  letter-spacing: 0;
+  margin-bottom: 56px;
+  animation: fadeUp .6s .12s ease both; opacity:0;
+}
+.splash-hint {
+  font-size: .8rem; color: var(--muted);
+  margin-bottom: 18px;
+  animation: fadeUp .6s .22s ease both; opacity:0;
+}
+.splash-btns {
+  display:flex; gap:12px;
+  animation: fadeUp .6s .32s ease both; opacity:0;
+}
+.s-btn {
+  padding: 12px 34px; border-radius: 100px;
+  border: 1.5px solid var(--brown-1);
+  font-family: 'Cairo', sans-serif;
+  font-size: .93rem; font-weight: 700;
+  cursor: pointer;
+  transition: all .22s;
+}
+.s-btn-ar { background: var(--brown-1); color: var(--cream); }
+.s-btn-en { background: transparent; color: var(--brown-1); font-family: 'Lora', serif; }
+.s-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 22px var(--shadow); }
 
-  /* divider */
-  hr.soft {
-    width: 100%; border: none;
-    border-top: 1.5px solid var(--border);
-    margin-bottom: 28px;
-  }
+/* ══════════════════════════════
+   MAIN SITE
+══════════════════════════════ */
+#site {
+  display:none; flex-direction:column;
+  align-items:center; width:100%;
+  max-width: 440px; padding: 24px 22px 64px;
+  position: relative; z-index: 1;
+}
+#site.on { display:flex; }
 
-  /* link cards */
-  .links { display: flex; flex-direction: column; gap: 12px; width: 100%; }
+/* top bar */
+.topbar {
+  width:100%; display:flex; justify-content:flex-end;
+  margin-bottom: 40px;
+}
+.lang-toggle {
+  background: rgba(255,252,246,0.7);
+  border: 1.5px solid var(--border);
+  border-radius: 100px;
+  padding: 7px 18px;
+  font-family: 'Cairo', sans-serif;
+  font-size: .74rem; font-weight: 700;
+  color: var(--muted); cursor: pointer;
+  transition: all .2s;
+  backdrop-filter: blur(8px);
+}
+.lang-toggle:hover { border-color: var(--brown-2); color: var(--brown-1); }
 
-  .card {
-    display: flex; align-items: center; gap: 16px;
-    background: var(--card);
-    border: 1.5px solid var(--border);
-    border-radius: 18px;
-    padding: 17px 20px;
-    text-decoration: none;
-    color: var(--text);
-    transition: all .25s cubic-bezier(.34,1.56,.64,1);
-    box-shadow: 0 2px 16px var(--shadow);
-  }
-  .card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 32px var(--shadow);
-    border-color: var(--pink);
-  }
+/* hero */
+.brand {
+  font-family: 'Pacifico', cursive;
+  font-size: 2.9rem;
+  color: var(--brown-1);
+  text-align: center; margin-bottom: 8px;
+  filter: drop-shadow(0 2px 8px rgba(59,31,14,.12));
+}
+.tagline {
+  font-family: 'Lora', serif;
+  font-style: italic;
+  font-size: .9rem;
+  color: var(--muted);
+  text-align: center;
+  margin-bottom: 20px;
+}
 
-  .card-ico {
-    width: 44px; height: 44px; border-radius: 14px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.15rem; flex-shrink: 0;
-  }
-  /* Per-card icon backgrounds */
-  .ico-menu { background: #fdf0e6; color: var(--rose); }
-  .ico-map  { background: #f0fdf4; color: #16a34a; }
-  .ico-wa   { background: #f0fdf4; color: #25d366; }
-  .ico-ig   { background: #fdf0e6; color: #e1306c; }
-  .ico-tt   { background: #f5f5f5; color: #010101; }
+/* ─── hours badge (open/closed) ─── */
+.hours-wrap {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  margin-bottom: 36px;
+}
 
-  .card-text { flex: 1; }
-  .card-title { font-size: .95rem; font-weight: 600; }
-  .card-sub   { font-size: .72rem; color: var(--muted); margin-top: 2px; }
+.status-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  border-radius: 100px; padding: 9px 22px;
+  font-family: 'Cairo', sans-serif;
+  font-size: .8rem; font-weight: 700;
+  border: 1.5px solid;
+  transition: all .4s;
+}
+/* open */
+.status-badge.open {
+  background: rgba(74,222,128,.10);
+  border-color: rgba(74,222,128,.35);
+  color: #166534;
+}
+/* closed */
+.status-badge.closed {
+  background: rgba(239,68,68,.08);
+  border-color: rgba(239,68,68,.25);
+  color: #991b1b;
+}
+/* soon */
+.status-badge.soon {
+  background: rgba(245,158,11,.10);
+  border-color: rgba(245,158,11,.35);
+  color: #92400e;
+}
 
-  .card-arrow {
-    color: var(--border);
-    font-size: .75rem;
-    transition: transform .2s, color .2s;
-  }
-  .card:hover .card-arrow { color: var(--rose); }
-  html[dir="ltr"] .card:hover .card-arrow { transform: translateX(4px); }
-  html[dir="rtl"] .card:hover .card-arrow { transform: translateX(-4px); }
+.status-dot {
+  width: 7px; height: 7px; border-radius: 50%; flex-shrink:0;
+  animation: dotPulse 2s infinite;
+}
+.open  .status-dot { background: #4ade80; }
+.closed .status-dot { background: #f87171; animation: none; }
+.soon  .status-dot { background: #f59e0b; }
 
-  /* footer */
-  footer {
-    margin-top: 44px;
-    font-size: .7rem;
-    color: var(--muted);
-    text-align: center;
-    line-height: 2;
-    opacity: .7;
-  }
+@keyframes dotPulse {
+  0%,100% { box-shadow: 0 0 0 0 currentColor; opacity:.8; }
+  50%     { box-shadow: 0 0 0 5px transparent; opacity:1; }
+}
 
-  /* animations */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(16px); }
-    to   { opacity: 1; transform: translateY(0);    }
-  }
+.hours-sub {
+  font-size: .74rem;
+  color: var(--muted);
+  font-family: 'Cairo', sans-serif;
+  font-weight: 400;
+}
 
-  .fade-up { animation: fadeUp .55s ease both; opacity: 0; }
-  .d1 { animation-delay: .1s; }
-  .d2 { animation-delay: .2s; }
-  .d3 { animation-delay: .3s; }
-  .d4 { animation-delay: .38s; }
-  .d5 { animation-delay: .46s; }
-  .d6 { animation-delay: .54s; }
-  .d7 { animation-delay: .62s; }
+/* divider */
+hr.soft {
+  width: 100%; border: none;
+  border-top: 1.5px solid var(--border);
+  margin-bottom: 26px;
+}
+
+/* ─── cards ─── */
+.links { display:flex; flex-direction:column; gap:11px; width:100%; }
+
+.card {
+  display: flex; align-items: center; gap: 15px;
+  background: var(--card);
+  border: 1.5px solid var(--border);
+  border-radius: 17px;
+  padding: 16px 18px;
+  text-decoration: none;
+  color: var(--text);
+  transition: all .24s cubic-bezier(.34,1.56,.64,1);
+  box-shadow: 0 2px 14px var(--shadow);
+  backdrop-filter: blur(6px);
+}
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px var(--shadow);
+  border-color: var(--brown-3);
+}
+
+.card-ico {
+  width: 44px; height: 44px; border-radius: 13px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.12rem; flex-shrink: 0;
+}
+.ico-menu { background: #f0e6d8; color: var(--brown-1); }
+.ico-map  { background: #e8f5e9; color: #2e7d32; }
+.ico-wa   { background: #e8f5e9; color: #25d366; }
+.ico-ig   { background: #fce4ec; color: #c2185b; }
+.ico-tt   { background: #ede8e3; color: #1a1a1a; }
+
+.card-text { flex:1; }
+.card-title { font-size: .93rem; font-weight: 700; line-height: 1.3; }
+.card-sub   { font-size: .71rem; color: var(--muted); margin-top: 2px; font-weight: 400; }
+
+.card-arrow {
+  color: var(--border);
+  font-size: .72rem;
+  transition: transform .2s, color .2s;
+  flex-shrink: 0;
+}
+.card:hover .card-arrow { color: var(--brown-3); }
+html[dir="ltr"] .card:hover .card-arrow { transform: translateX(4px); }
+html[dir="rtl"] .card:hover .card-arrow { transform: translateX(-4px); }
+
+/* footer */
+footer {
+  margin-top: 42px;
+  font-size: .69rem; font-weight: 400;
+  color: var(--muted);
+  text-align: center; line-height: 2; opacity: .65;
+}
+
+/* ─── entrance animations ─── */
+@keyframes fadeUp {
+  from { opacity:0; transform: translateY(18px); }
+  to   { opacity:1; transform: translateY(0);     }
+}
+.fu { animation: fadeUp .5s ease both; opacity:0; }
+.d0 { animation-delay: .05s; }
+.d1 { animation-delay: .14s; }
+.d2 { animation-delay: .22s; }
+.d3 { animation-delay: .30s; }
+.d4 { animation-delay: .38s; }
+.d5 { animation-delay: .46s; }
+.d6 { animation-delay: .54s; }
+.d7 { animation-delay: .62s; }
+.d8 { animation-delay: .70s; }
 </style>
 </head>
 <body>
 
-<!-- ── SPLASH ── -->
+<!-- Loader -->
+<div id="loader"><div class="loader-ring"></div></div>
+
+<!-- Splash -->
 <div id="splash">
-  <div class="splash-title">Dippy Dip</div>
-  <div class="splash-sub">ديبي ديب</div>
-  <p class="splash-label">اختر لغتك &nbsp;—&nbsp; Choose your language</p>
-  <div class="splash-row">
-    <button class="lang-btn lang-btn-ar" onclick="setLang('ar')">العربية</button>
-    <button class="lang-btn lang-btn-en" onclick="setLang('en')">English</button>
+  <div class="splash-brand">Dippy Dip</div>
+  <div class="splash-ar">ديبي ديب</div>
+  <p class="splash-hint">اختر لغتك — Choose your language</p>
+  <div class="splash-btns">
+    <button class="s-btn s-btn-ar" onclick="setLang('ar')">العربية</button>
+    <button class="s-btn s-btn-en" onclick="setLang('en')">English</button>
   </div>
 </div>
 
-<!-- ── MAIN SITE ── -->
+<!-- Main -->
 <div id="site">
 
-  <div class="topbar">
+  <div class="topbar fu d0">
     <button class="lang-toggle" id="lang-btn" onclick="toggleLang()"></button>
   </div>
 
-  <div class="brand fade-up d1">Dippy Dip</div>
-  <div class="tagline fade-up d2" id="tagline"></div>
+  <div class="brand fu d1">Dippy Dip</div>
+  <div class="tagline fu d2" id="tagline"></div>
 
-  <div class="hours-pill fade-up d3">
-    <span class="dot"></span>
-    <span id="hours"></span>
+  <!-- Status -->
+  <div class="hours-wrap fu d3">
+    <div class="status-badge" id="status-badge">
+      <span class="status-dot"></span>
+      <span id="status-text"></span>
+    </div>
+    <span class="hours-sub" id="hours-sub"></span>
   </div>
 
-  <hr class="soft fade-up d3">
+  <hr class="soft fu d3">
 
   <div class="links">
-
-    <a href="menu.pdf" target="_blank" class="card fade-up d3">
-      <div class="card-ico ico-menu">
-        <i class="fa-solid fa-utensils"></i>
-      </div>
+    <a href="menu.pdf" target="_blank" class="card fu d3">
+      <div class="card-ico ico-menu"><i class="fa-solid fa-utensils"></i></div>
       <div class="card-text">
         <div class="card-title" id="l-menu"></div>
         <div class="card-sub"  id="s-menu"></div>
       </div>
-      <i class="fa-solid fa-chevron-left card-arrow" id="arr-menu"></i>
+      <i class="fa-solid fa-chevron-left card-arrow" id="ar-menu"></i>
     </a>
 
-    <a href="https://maps.app.goo.gl/taht4h75wdRGGRkU6?g_st=ic" target="_blank" class="card fade-up d4">
-      <div class="card-ico ico-map">
-        <i class="fa-solid fa-location-dot"></i>
-      </div>
+    <a href="https://maps.app.goo.gl/taht4h75wdRGGRkU6?g_st=ic" target="_blank" class="card fu d4">
+      <div class="card-ico ico-map"><i class="fa-solid fa-location-dot"></i></div>
       <div class="card-text">
         <div class="card-title" id="l-map"></div>
         <div class="card-sub"  id="s-map"></div>
       </div>
-      <i class="fa-solid fa-chevron-left card-arrow" id="arr-map"></i>
+      <i class="fa-solid fa-chevron-left card-arrow" id="ar-map"></i>
     </a>
 
-    <a href="https://wa.me/97339887358" target="_blank" class="card fade-up d5">
-      <div class="card-ico ico-wa">
-        <i class="fa-brands fa-whatsapp"></i>
-      </div>
+    <a href="https://wa.me/97339887358" target="_blank" class="card fu d5">
+      <div class="card-ico ico-wa"><i class="fa-brands fa-whatsapp"></i></div>
       <div class="card-text">
         <div class="card-title" id="l-wa"></div>
         <div class="card-sub"  id="s-wa"></div>
       </div>
-      <i class="fa-solid fa-chevron-left card-arrow" id="arr-wa"></i>
+      <i class="fa-solid fa-chevron-left card-arrow" id="ar-wa"></i>
     </a>
 
-    <a href="https://instagram.com/Dippy_diip" target="_blank" class="card fade-up d6">
-      <div class="card-ico ico-ig">
-        <i class="fa-brands fa-instagram"></i>
-      </div>
+    <a href="https://instagram.com/Dippy_diip" target="_blank" class="card fu d6">
+      <div class="card-ico ico-ig"><i class="fa-brands fa-instagram"></i></div>
       <div class="card-text">
         <div class="card-title" id="l-ig"></div>
         <div class="card-sub"  id="s-ig"></div>
       </div>
-      <i class="fa-solid fa-chevron-left card-arrow" id="arr-ig"></i>
+      <i class="fa-solid fa-chevron-left card-arrow" id="ar-ig"></i>
     </a>
 
-    <a href="https://tiktok.com/@dippy_dip_" target="_blank" class="card fade-up d7">
-      <div class="card-ico ico-tt">
-        <i class="fa-brands fa-tiktok"></i>
-      </div>
+    <a href="https://tiktok.com/@dippy_dip_" target="_blank" class="card fu d7">
+      <div class="card-ico ico-tt"><i class="fa-brands fa-tiktok"></i></div>
       <div class="card-text">
         <div class="card-title" id="l-tt"></div>
         <div class="card-sub"  id="s-tt"></div>
       </div>
-      <i class="fa-solid fa-chevron-left card-arrow" id="arr-tt"></i>
+      <i class="fa-solid fa-chevron-left card-arrow" id="ar-tt"></i>
     </a>
-
   </div>
 
-  <footer class="fade-up" style="animation-delay:.7s">
-    <span id="footer"></span>
-  </footer>
-
+  <footer class="fu d8"><span id="footer-txt"></span></footer>
 </div>
 
 <script>
+/* ══════════════════════
+   TRANSLATIONS
+══════════════════════ */
 const T = {
   ar: {
-    dir:'rtl', lang:'ar',
-    tagline: 'حلويات من قلبنا إلى قلبك',
-    hours:   'يومياً  ٤:٠٠ م – ١٢:٠٠ م',
-    toggle:  'English',
-    arrow:   'fa-chevron-left',
-    footer:  'جميع الحقوق محفوظة © Dippy Dip',
+    dir:'rtl', lang:'ar', toggle:'English',
+    tagline: 'قهوة وحلويات من قلبنا',
+    hoursLabel: 'يومياً  ٤:٠٠ م – ١٢:٣٠ ص',
+    status: {
+      open:        'مفتوح الآن 🟢',
+      closed:      'مغلق الآن',
+      openSoon:    'يفتح قريباً ⏳',
+      closeSoon:   'يغلق قريباً ⚠️',
+    },
+    footer: 'جميع الحقوق محفوظة © Dippy Dip',
+    arrow: 'fa-chevron-left',
     cards: {
-      menu: { title:'قائمة الطعام',  sub:'شوف اللي عندنا'         },
-      map:  { title:'موقعنا',        sub:'افتح في خرائط جوجل'     },
-      wa:   { title:'واتساب',        sub:'تواصل معنا مباشرة'       },
-      ig:   { title:'إنستقرام',      sub:'@Dippy_diip'             },
-      tt:   { title:'تيك توك',       sub:'@dippy_dip_'             },
+      menu: { title:'قائمة الطعام',   sub:'شوف اللي عندنا'      },
+      map:  { title:'موقعنا',         sub:'افتح في خرائط جوجل'  },
+      wa:   { title:'واتساب',         sub:'تواصل معنا مباشرة'    },
+      ig:   { title:'إنستقرام',       sub:'@Dippy_diip'          },
+      tt:   { title:'تيك توك',        sub:'@dippy_dip_'          },
     }
   },
   en: {
-    dir:'ltr', lang:'en',
-    tagline: 'Sweets from our heart to yours',
-    hours:   'Daily  4:00 PM – 12:00 AM',
-    toggle:  'العربية',
-    arrow:   'fa-chevron-right',
-    footer:  'All rights reserved © Dippy Dip',
+    dir:'ltr', lang:'en', toggle:'العربية',
+    tagline: 'Coffee & sweets from our heart',
+    hoursLabel: 'Daily  4:00 PM – 12:30 AM',
+    status: {
+      open:        'Open Now 🟢',
+      closed:      'Closed Now',
+      openSoon:    'Opening Soon ⏳',
+      closeSoon:   'Closing Soon ⚠️',
+    },
+    footer: 'All rights reserved © Dippy Dip',
+    arrow: 'fa-chevron-right',
     cards: {
-      menu: { title:'Our Menu',       sub:'See what we offer'       },
-      map:  { title:'Location',       sub:'Open in Google Maps'     },
-      wa:   { title:'WhatsApp',       sub:'Chat with us directly'   },
-      ig:   { title:'Instagram',      sub:'@Dippy_diip'             },
-      tt:   { title:'TikTok',         sub:'@dippy_dip_'             },
+      menu: { title:'Our Menu',        sub:'See what we offer'      },
+      map:  { title:'Location',        sub:'Open in Google Maps'    },
+      wa:   { title:'WhatsApp',        sub:'Chat with us directly'  },
+      ig:   { title:'Instagram',       sub:'@Dippy_diip'            },
+      tt:   { title:'TikTok',          sub:'@dippy_dip_'            },
     }
   }
 };
 
 let lang = 'ar';
 
-const setCookie = (n,v,d) => { const e=new Date(); e.setTime(e.getTime()+d*864e5); document.cookie=`${n}=${v};expires=${e.toUTCString()};path=/`; };
-const getCookie = n => document.cookie.split(';').map(c=>c.trim()).find(c=>c.startsWith(n+'='))?.split('=')[1] || null;
+/* ── cookies ── */
+const setCookie = (n,v,d)=>{ const e=new Date(); e.setTime(e.getTime()+d*864e5); document.cookie=`${n}=${v};expires=${e.toUTCString()};path=/`; };
+const getCookie = n=>document.cookie.split(';').map(c=>c.trim()).find(c=>c.startsWith(n+'='))?.split('=')[1]||null;
 
+/* ══════════════════════
+   OPEN / CLOSED LOGIC
+   Opens:  16:00 (4 PM)
+   Closes: 00:30 (12:30 AM next day)
+   "soon" window = 30 min
+══════════════════════ */
+function getStatus() {
+  const now  = new Date();
+  const mins = now.getHours() * 60 + now.getMinutes();
+  const OPEN  = 16 * 60;   // 960  → 4:00 PM
+  const CLOSE = 0  * 60 + 30; // 30 → 12:30 AM
+  const SOON  = 30;
+
+  // Is it currently open?
+  // Open window: mins >= 960  OR  mins < 30
+  const isOpen = mins >= OPEN || mins < CLOSE;
+
+  if (isOpen) {
+    // closing soon? last 30 min = after 23:30 OR before 00:30
+    const nearClose = mins >= (24 * 60 - SOON) || mins < CLOSE;
+    if (nearClose) return 'closeSoon';
+    return 'open';
+  } else {
+    // opening soon? 30 min before 4 PM
+    if (mins >= OPEN - SOON && mins < OPEN) return 'openSoon';
+    return 'closed';
+  }
+}
+
+function updateStatus(t) {
+  const key    = getStatus();
+  const badge  = document.getElementById('status-badge');
+  const label  = document.getElementById('status-text');
+  const sub    = document.getElementById('hours-sub');
+
+  badge.className = 'status-badge';
+  if (key === 'open')      badge.classList.add('open');
+  else if (key === 'closed') badge.classList.add('closed');
+  else                       badge.classList.add('soon');
+
+  label.textContent = t.status[key];
+  sub.textContent   = t.hoursLabel;
+}
+
+/* ══════════════════════
+   APPLY LANGUAGE
+══════════════════════ */
 function apply(code) {
   lang = code;
   const t = T[code];
   document.documentElement.lang = t.lang;
   document.documentElement.dir  = t.dir;
 
-  document.getElementById('tagline').textContent = t.tagline;
-  document.getElementById('hours').textContent   = t.hours;
-  document.getElementById('lang-btn').textContent = t.toggle;
-  document.getElementById('footer').textContent   = t.footer;
+  document.getElementById('tagline').textContent    = t.tagline;
+  document.getElementById('lang-btn').textContent   = t.toggle;
+  document.getElementById('footer-txt').textContent = t.footer;
 
-  const keys = ['menu','map','wa','ig','tt'];
-  keys.forEach(k => {
+  updateStatus(t);
+
+  ['menu','map','wa','ig','tt'].forEach(k => {
     document.getElementById(`l-${k}`).textContent = t.cards[k].title;
     document.getElementById(`s-${k}`).textContent = t.cards[k].sub;
-    const arr = document.getElementById(`arr-${k}`);
+    const arr = document.getElementById(`ar-${k}`);
     arr.classList.remove('fa-chevron-left','fa-chevron-right');
     arr.classList.add(t.arrow);
   });
@@ -400,7 +513,7 @@ function setLang(code) {
   setCookie('dippy_lang', code, 365);
   apply(code);
   document.getElementById('splash').classList.add('gone');
-  setTimeout(() => document.getElementById('site').classList.add('on'), 400);
+  setTimeout(()=> document.getElementById('site').classList.add('on'), 380);
 }
 
 function toggleLang() {
@@ -409,13 +522,22 @@ function toggleLang() {
   apply(next);
 }
 
+/* ══════════════════════
+   INIT
+══════════════════════ */
 window.addEventListener('DOMContentLoaded', () => {
+  // hide loader after fonts settle
+  setTimeout(() => document.getElementById('loader').classList.add('gone'), 700);
+
   const saved = getCookie('dippy_lang');
   if (saved) {
     apply(saved);
     document.getElementById('splash').classList.add('gone');
-    document.getElementById('site').classList.add('on');
+    setTimeout(()=> document.getElementById('site').classList.add('on'), 50);
   }
+
+  // refresh status every minute
+  setInterval(() => updateStatus(T[lang]), 60000);
 });
 </script>
 </body>
