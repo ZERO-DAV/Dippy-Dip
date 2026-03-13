@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dippy Dip | ديبي ديب</title>
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=IBM+Plex+Sans+Arabic:wght@300;400;600&family=Lora:ital@0;1&display=swap" rel="stylesheet">
+
+<!-- Icons: Font Awesome + Simple Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+  :root {
+    --bg:       #faf6f1;
+    --pink:     #c9a882;
+    --rose:     #7c4f2f;
+    --lilac:    #d4b896;
+    --text:     #2c1a0e;
+    --muted:    #8a6e56;
+    --card:     #ffffff;
+    --border:   rgba(124,79,47,0.15);
+    --shadow:   rgba(124,79,47,0.10);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: 'IBM Plex Sans Arabic', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* subtle dot pattern */
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 0;
+    background-image: radial-gradient(circle, rgba(124,79,47,0.10) 1.5px, transparent 1.5px);
+    background-size: 28px 28px;
+    pointer-events: none;
+  }
+
+  /* ── SPLASH ── */
+  #splash {
+    position: fixed; inset: 0; z-index: 100;
+    background: var(--bg);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 0;
+    transition: opacity .55s ease, visibility .55s;
+  }
+  #splash.gone { opacity: 0; visibility: hidden; pointer-events: none; }
+
+  .splash-title {
+    font-family: 'Pacifico', cursive;
+    font-size: 3rem;
+    color: var(--rose);
+    margin-bottom: 6px;
+    animation: fadeUp .7s ease both;
+  }
+  .splash-sub {
+    font-size: .85rem;
+    color: var(--muted);
+    letter-spacing: 4px;
+    margin-bottom: 52px;
+    animation: fadeUp .7s .15s ease both;
+    opacity: 0;
+  }
+  .splash-label {
+    font-size: .78rem;
+    color: var(--muted);
+    margin-bottom: 20px;
+    animation: fadeUp .7s .25s ease both;
+    opacity: 0;
+  }
+  .splash-row {
+    display: flex; gap: 14px;
+    animation: fadeUp .7s .35s ease both;
+    opacity: 0;
+  }
+  .lang-btn {
+    padding: 13px 36px;
+    border-radius: 100px;
+    border: 1.5px solid var(--rose);
+    font-size: .95rem; font-weight: 600;
+    cursor: pointer;
+    transition: all .25s;
+    font-family: 'IBM Plex Sans Arabic', sans-serif;
+  }
+  .lang-btn-ar { background: var(--rose); color: #fff; }
+  .lang-btn-en { background: transparent; color: var(--rose); font-family: 'Lora', serif; }
+  .lang-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px var(--shadow); }
+
+  /* ── MAIN ── */
+  #site {
+    display: none; flex-direction: column;
+    align-items: center; padding: 28px 24px 64px;
+    width: 100%; max-width: 440px;
+    position: relative; z-index: 1;
+  }
+  #site.on { display: flex; }
+
+  /* top bar */
+  .topbar {
+    width: 100%; display: flex; justify-content: flex-end;
+    margin-bottom: 44px;
+  }
+  .lang-toggle {
+    background: none;
+    border: 1.5px solid var(--border);
+    border-radius: 100px;
+    padding: 7px 18px;
+    font-size: .75rem; font-weight: 600;
+    color: var(--muted); cursor: pointer;
+    transition: all .2s;
+    font-family: 'IBM Plex Sans Arabic', 'Lora', sans-serif;
+    letter-spacing: .5px;
+  }
+  .lang-toggle:hover { border-color: var(--rose); color: var(--rose); }
+
+  /* hero */
+  .brand {
+    font-family: 'Pacifico', cursive;
+    font-size: 2.8rem;
+    color: var(--rose);
+    margin-bottom: 10px;
+    text-align: center;
+  }
+  .tagline {
+    font-family: 'Lora', serif;
+    font-style: italic;
+    font-size: .95rem;
+    color: var(--muted);
+    margin-bottom: 18px;
+    text-align: center;
+  }
+  .hours-pill {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: #fff;
+    border: 1.5px solid var(--border);
+    border-radius: 100px;
+    padding: 8px 20px;
+    font-size: .78rem; font-weight: 600;
+    color: var(--text);
+    margin-bottom: 40px;
+    box-shadow: 0 2px 12px var(--shadow);
+  }
+  .dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: #4ade80;
+    box-shadow: 0 0 0 0 rgba(74,222,128,.5);
+    animation: blink 2s infinite;
+    flex-shrink: 0;
+  }
+  @keyframes blink {
+    0%,100%{ box-shadow: 0 0 0 0 rgba(74,222,128,.5); }
+    50%    { box-shadow: 0 0 0 6px rgba(74,222,128,0); }
+  }
+
+  /* divider */
+  hr.soft {
+    width: 100%; border: none;
+    border-top: 1.5px solid var(--border);
+    margin-bottom: 28px;
+  }
+
+  /* link cards */
+  .links { display: flex; flex-direction: column; gap: 12px; width: 100%; }
+
+  .card {
+    display: flex; align-items: center; gap: 16px;
+    background: var(--card);
+    border: 1.5px solid var(--border);
+    border-radius: 18px;
+    padding: 17px 20px;
+    text-decoration: none;
+    color: var(--text);
+    transition: all .25s cubic-bezier(.34,1.56,.64,1);
+    box-shadow: 0 2px 16px var(--shadow);
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 32px var(--shadow);
+    border-color: var(--pink);
+  }
+
+  .card-ico {
+    width: 44px; height: 44px; border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.15rem; flex-shrink: 0;
+  }
+  /* Per-card icon backgrounds */
+  .ico-menu { background: #fdf0e6; color: var(--rose); }
+  .ico-map  { background: #f0fdf4; color: #16a34a; }
+  .ico-wa   { background: #f0fdf4; color: #25d366; }
+  .ico-ig   { background: #fdf0e6; color: #e1306c; }
+  .ico-tt   { background: #f5f5f5; color: #010101; }
+
+  .card-text { flex: 1; }
+  .card-title { font-size: .95rem; font-weight: 600; }
+  .card-sub   { font-size: .72rem; color: var(--muted); margin-top: 2px; }
+
+  .card-arrow {
+    color: var(--border);
+    font-size: .75rem;
+    transition: transform .2s, color .2s;
+  }
+  .card:hover .card-arrow { color: var(--rose); }
+  html[dir="ltr"] .card:hover .card-arrow { transform: translateX(4px); }
+  html[dir="rtl"] .card:hover .card-arrow { transform: translateX(-4px); }
+
+  /* footer */
+  footer {
+    margin-top: 44px;
+    font-size: .7rem;
+    color: var(--muted);
+    text-align: center;
+    line-height: 2;
+    opacity: .7;
+  }
+
+  /* animations */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0);    }
+  }
+
+  .fade-up { animation: fadeUp .55s ease both; opacity: 0; }
+  .d1 { animation-delay: .1s; }
+  .d2 { animation-delay: .2s; }
+  .d3 { animation-delay: .3s; }
+  .d4 { animation-delay: .38s; }
+  .d5 { animation-delay: .46s; }
+  .d6 { animation-delay: .54s; }
+  .d7 { animation-delay: .62s; }
+</style>
+</head>
+<body>
+
+<!-- ── SPLASH ── -->
+<div id="splash">
+  <div class="splash-title">Dippy Dip</div>
+  <div class="splash-sub">ديبي ديب</div>
+  <p class="splash-label">اختر لغتك &nbsp;—&nbsp; Choose your language</p>
+  <div class="splash-row">
+    <button class="lang-btn lang-btn-ar" onclick="setLang('ar')">العربية</button>
+    <button class="lang-btn lang-btn-en" onclick="setLang('en')">English</button>
+  </div>
+</div>
+
+<!-- ── MAIN SITE ── -->
+<div id="site">
+
+  <div class="topbar">
+    <button class="lang-toggle" id="lang-btn" onclick="toggleLang()"></button>
+  </div>
+
+  <div class="brand fade-up d1">Dippy Dip</div>
+  <div class="tagline fade-up d2" id="tagline"></div>
+
+  <div class="hours-pill fade-up d3">
+    <span class="dot"></span>
+    <span id="hours"></span>
+  </div>
+
+  <hr class="soft fade-up d3">
+
+  <div class="links">
+
+    <a href="menu.pdf" target="_blank" class="card fade-up d3">
+      <div class="card-ico ico-menu">
+        <i class="fa-solid fa-utensils"></i>
+      </div>
+      <div class="card-text">
+        <div class="card-title" id="l-menu"></div>
+        <div class="card-sub"  id="s-menu"></div>
+      </div>
+      <i class="fa-solid fa-chevron-left card-arrow" id="arr-menu"></i>
+    </a>
+
+    <a href="https://maps.app.goo.gl/taht4h75wdRGGRkU6?g_st=ic" target="_blank" class="card fade-up d4">
+      <div class="card-ico ico-map">
+        <i class="fa-solid fa-location-dot"></i>
+      </div>
+      <div class="card-text">
+        <div class="card-title" id="l-map"></div>
+        <div class="card-sub"  id="s-map"></div>
+      </div>
+      <i class="fa-solid fa-chevron-left card-arrow" id="arr-map"></i>
+    </a>
+
+    <a href="https://wa.me/97339887358" target="_blank" class="card fade-up d5">
+      <div class="card-ico ico-wa">
+        <i class="fa-brands fa-whatsapp"></i>
+      </div>
+      <div class="card-text">
+        <div class="card-title" id="l-wa"></div>
+        <div class="card-sub"  id="s-wa"></div>
+      </div>
+      <i class="fa-solid fa-chevron-left card-arrow" id="arr-wa"></i>
+    </a>
+
+    <a href="https://instagram.com/Dippy_diip" target="_blank" class="card fade-up d6">
+      <div class="card-ico ico-ig">
+        <i class="fa-brands fa-instagram"></i>
+      </div>
+      <div class="card-text">
+        <div class="card-title" id="l-ig"></div>
+        <div class="card-sub"  id="s-ig"></div>
+      </div>
+      <i class="fa-solid fa-chevron-left card-arrow" id="arr-ig"></i>
+    </a>
+
+    <a href="https://tiktok.com/@dippy_dip_" target="_blank" class="card fade-up d7">
+      <div class="card-ico ico-tt">
+        <i class="fa-brands fa-tiktok"></i>
+      </div>
+      <div class="card-text">
+        <div class="card-title" id="l-tt"></div>
+        <div class="card-sub"  id="s-tt"></div>
+      </div>
+      <i class="fa-solid fa-chevron-left card-arrow" id="arr-tt"></i>
+    </a>
+
+  </div>
+
+  <footer class="fade-up" style="animation-delay:.7s">
+    <span id="footer"></span>
+  </footer>
+
+</div>
+
+<script>
+const T = {
+  ar: {
+    dir:'rtl', lang:'ar',
+    tagline: 'حلويات من قلبنا إلى قلبك',
+    hours:   'يومياً  ٤:٠٠ م – ١٢:٠٠ م',
+    toggle:  'English',
+    arrow:   'fa-chevron-left',
+    footer:  'جميع الحقوق محفوظة © Dippy Dip',
+    cards: {
+      menu: { title:'قائمة الطعام',  sub:'شوف اللي عندنا'         },
+      map:  { title:'موقعنا',        sub:'افتح في خرائط جوجل'     },
+      wa:   { title:'واتساب',        sub:'تواصل معنا مباشرة'       },
+      ig:   { title:'إنستقرام',      sub:'@Dippy_diip'             },
+      tt:   { title:'تيك توك',       sub:'@dippy_dip_'             },
+    }
+  },
+  en: {
+    dir:'ltr', lang:'en',
+    tagline: 'Sweets from our heart to yours',
+    hours:   'Daily  4:00 PM – 12:00 AM',
+    toggle:  'العربية',
+    arrow:   'fa-chevron-right',
+    footer:  'All rights reserved © Dippy Dip',
+    cards: {
+      menu: { title:'Our Menu',       sub:'See what we offer'       },
+      map:  { title:'Location',       sub:'Open in Google Maps'     },
+      wa:   { title:'WhatsApp',       sub:'Chat with us directly'   },
+      ig:   { title:'Instagram',      sub:'@Dippy_diip'             },
+      tt:   { title:'TikTok',         sub:'@dippy_dip_'             },
+    }
+  }
+};
+
+let lang = 'ar';
+
+const setCookie = (n,v,d) => { const e=new Date(); e.setTime(e.getTime()+d*864e5); document.cookie=`${n}=${v};expires=${e.toUTCString()};path=/`; };
+const getCookie = n => document.cookie.split(';').map(c=>c.trim()).find(c=>c.startsWith(n+'='))?.split('=')[1] || null;
+
+function apply(code) {
+  lang = code;
+  const t = T[code];
+  document.documentElement.lang = t.lang;
+  document.documentElement.dir  = t.dir;
+
+  document.getElementById('tagline').textContent = t.tagline;
+  document.getElementById('hours').textContent   = t.hours;
+  document.getElementById('lang-btn').textContent = t.toggle;
+  document.getElementById('footer').textContent   = t.footer;
+
+  const keys = ['menu','map','wa','ig','tt'];
+  keys.forEach(k => {
+    document.getElementById(`l-${k}`).textContent = t.cards[k].title;
+    document.getElementById(`s-${k}`).textContent = t.cards[k].sub;
+    const arr = document.getElementById(`arr-${k}`);
+    arr.classList.remove('fa-chevron-left','fa-chevron-right');
+    arr.classList.add(t.arrow);
+  });
+}
+
+function setLang(code) {
+  setCookie('dippy_lang', code, 365);
+  apply(code);
+  document.getElementById('splash').classList.add('gone');
+  setTimeout(() => document.getElementById('site').classList.add('on'), 400);
+}
+
+function toggleLang() {
+  const next = lang === 'ar' ? 'en' : 'ar';
+  setCookie('dippy_lang', next, 365);
+  apply(next);
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  const saved = getCookie('dippy_lang');
+  if (saved) {
+    apply(saved);
+    document.getElementById('splash').classList.add('gone');
+    document.getElementById('site').classList.add('on');
+  }
+});
+</script>
+</body>
+</html>
