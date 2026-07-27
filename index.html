@@ -4,13 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dippy Dip | ديبي ديب</title>
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <!-- Cairo: أفضل خط عربي للواجهات -->
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&family=Pacifico&family=Lora:ital@1&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
 <style>
 :root {
   --bg:        #fdf3e3;
@@ -24,10 +22,8 @@
   --border:    rgba(59,31,14,0.13);
   --shadow:    rgba(59,31,14,0.10);
 }
-
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 html { scroll-behavior:smooth; }
-
 body {
   font-family: 'Cairo', sans-serif;
   background-color: var(--bg);
@@ -38,7 +34,6 @@ body {
   justify-content: center;
   overflow-x: hidden;
 }
-
 /* ─── solid cream background ─── */
 body::before {
   content: '';
@@ -46,7 +41,6 @@ body::before {
   pointer-events: none;
   background: #fdf3e3;
 }
-
 /* ─── subtle noise grain over gradient ─── */
 body::after {
   content: '';
@@ -55,7 +49,6 @@ body::after {
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-size: 200px 200px;
 }
-
 /* ══════════════════════════════
    PAGE LOADER
 ══════════════════════════════ */
@@ -66,7 +59,6 @@ body::after {
   transition: opacity .5s ease, visibility .5s;
 }
 #loader.gone { opacity:0; visibility:hidden; pointer-events:none; }
-
 .loader-ring {
   width: 52px; height: 52px;
   border: 3px solid rgba(253,247,239,.15);
@@ -75,7 +67,6 @@ body::after {
   animation: spin .8s linear infinite;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
-
 /* ══════════════════════════════
    SPLASH
 ══════════════════════════════ */
@@ -87,7 +78,6 @@ body::after {
   transition: opacity .5s ease, visibility .5s;
 }
 #splash.gone { opacity:0; visibility:hidden; pointer-events:none; }
-
 .splash-brand {
   font-family: 'Pacifico', cursive;
   font-size: 3rem;
@@ -123,7 +113,6 @@ body::after {
 .s-btn-ar { background: var(--brown-1); color: var(--cream); }
 .s-btn-en { background: transparent; color: var(--brown-1); font-family: 'Lora', serif; }
 .s-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 22px var(--shadow); }
-
 /* ══════════════════════════════
    MAIN SITE
 ══════════════════════════════ */
@@ -134,7 +123,6 @@ body::after {
   position: relative; z-index: 1;
 }
 #site.on { display:flex; }
-
 /* top bar */
 .topbar {
   width:100%; display:flex; justify-content:flex-end;
@@ -152,7 +140,6 @@ body::after {
   backdrop-filter: blur(8px);
 }
 .lang-toggle:hover { border-color: var(--brown-2); color: var(--brown-1); }
-
 /* hero */
 .brand {
   font-family: 'Pacifico', cursive;
@@ -169,13 +156,11 @@ body::after {
   text-align: center;
   margin-bottom: 20px;
 }
-
 /* ─── hours badge (open/closed) ─── */
 .hours-wrap {
   display: flex; flex-direction: column; align-items: center; gap: 6px;
   margin-bottom: 36px;
 }
-
 .status-badge {
   display: inline-flex; align-items: center; gap: 8px;
   border-radius: 100px; padding: 9px 22px;
@@ -202,7 +187,6 @@ body::after {
   border-color: rgba(245,158,11,.35);
   color: #92400e;
 }
-
 .status-dot {
   width: 7px; height: 7px; border-radius: 50%; flex-shrink:0;
   animation: dotPulse 2s infinite;
@@ -210,29 +194,24 @@ body::after {
 .open  .status-dot { background: #4ade80; }
 .closed .status-dot { background: #f87171; animation: none; }
 .soon  .status-dot { background: #f59e0b; }
-
 @keyframes dotPulse {
   0%,100% { box-shadow: 0 0 0 0 currentColor; opacity:.8; }
   50%     { box-shadow: 0 0 0 5px transparent; opacity:1; }
 }
-
 .hours-sub {
   font-size: .74rem;
   color: var(--muted);
   font-family: 'Cairo', sans-serif;
   font-weight: 400;
 }
-
 /* divider */
 hr.soft {
   width: 100%; border: none;
   border-top: 1.5px solid var(--border);
   margin-bottom: 26px;
 }
-
 /* ─── cards ─── */
 .links { display:flex; flex-direction:column; gap:11px; width:100%; }
-
 .card {
   display: flex; align-items: center; gap: 15px;
   background: var(--card);
@@ -250,7 +229,6 @@ hr.soft {
   box-shadow: 0 10px 30px var(--shadow);
   border-color: var(--brown-3);
 }
-
 .card-ico {
   width: 44px; height: 44px; border-radius: 13px;
   display: flex; align-items: center; justify-content: center;
@@ -261,11 +239,9 @@ hr.soft {
 .ico-wa   { background: #e8f5e9; color: #25d366; }
 .ico-ig   { background: #fce4ec; color: #c2185b; }
 .ico-tt   { background: #ede8e3; color: #1a1a1a; }
-
 .card-text { flex:1; }
 .card-title { font-size: .93rem; font-weight: 700; line-height: 1.3; }
 .card-sub   { font-size: .71rem; color: var(--muted); margin-top: 2px; font-weight: 400; }
-
 .card-arrow {
   color: var(--border);
   font-size: .72rem;
@@ -275,7 +251,6 @@ hr.soft {
 .card:hover .card-arrow { color: var(--brown-3); }
 html[dir="ltr"] .card:hover .card-arrow { transform: translateX(4px); }
 html[dir="rtl"] .card:hover .card-arrow { transform: translateX(-4px); }
-
 /* footer */
 footer {
   margin-top: 42px;
@@ -283,7 +258,6 @@ footer {
   color: var(--muted);
   text-align: center; line-height: 2; opacity: .65;
 }
-
 /* ─── entrance animations ─── */
 @keyframes fadeUp {
   from { opacity:0; transform: translateY(18px); }
@@ -302,10 +276,8 @@ footer {
 </style>
 </head>
 <body>
-
 <!-- Loader -->
 <div id="loader"><div class="loader-ring"></div></div>
-
 <!-- Splash -->
 <div id="splash">
   <div class="splash-brand">Dippy Dip</div>
@@ -316,17 +288,13 @@ footer {
     <button class="s-btn s-btn-en" onclick="setLang('en')">English</button>
   </div>
 </div>
-
 <!-- Main -->
 <div id="site">
-
   <div class="topbar fu d0">
     <button class="lang-toggle" id="lang-btn" onclick="toggleLang()"></button>
   </div>
-
   <div class="brand fu d1">Dippy Dip</div>
   <div class="tagline fu d2" id="tagline"></div>
-
   <!-- Status -->
   <div class="hours-wrap fu d3">
     <div class="status-badge" id="status-badge">
@@ -335,9 +303,7 @@ footer {
     </div>
     <span class="hours-sub" id="hours-sub"></span>
   </div>
-
   <hr class="soft fu d3">
-
   <div class="links">
     <a href="menu.pdf" target="_blank" class="card fu d3">
       <div class="card-ico ico-menu"><i class="fa-solid fa-utensils"></i></div>
@@ -347,8 +313,7 @@ footer {
       </div>
       <i class="fa-solid fa-chevron-left card-arrow" id="ar-menu"></i>
     </a>
-
-    <a href="https://maps.app.goo.gl/taht4h75wdRGGRkU6?g_st=ic" target="_blank" class="card fu d4">
+    <a href="https://maps.google.com/?q=26.213594,50.480217" target="_blank" class="card fu d4">
       <div class="card-ico ico-map"><i class="fa-solid fa-location-dot"></i></div>
       <div class="card-text">
         <div class="card-title" id="l-map"></div>
@@ -356,7 +321,6 @@ footer {
       </div>
       <i class="fa-solid fa-chevron-left card-arrow" id="ar-map"></i>
     </a>
-
     <a href="https://wa.me/97339887358" target="_blank" class="card fu d5">
       <div class="card-ico ico-wa"><i class="fa-brands fa-whatsapp"></i></div>
       <div class="card-text">
@@ -365,7 +329,6 @@ footer {
       </div>
       <i class="fa-solid fa-chevron-left card-arrow" id="ar-wa"></i>
     </a>
-
     <a href="https://instagram.com/Dippy_diip" target="_blank" class="card fu d6">
       <div class="card-ico ico-ig"><i class="fa-brands fa-instagram"></i></div>
       <div class="card-text">
@@ -374,7 +337,6 @@ footer {
       </div>
       <i class="fa-solid fa-chevron-left card-arrow" id="ar-ig"></i>
     </a>
-
     <a href="https://tiktok.com/@dippy_dip_" target="_blank" class="card fu d7">
       <div class="card-ico ico-tt"><i class="fa-brands fa-tiktok"></i></div>
       <div class="card-text">
@@ -384,10 +346,8 @@ footer {
       <i class="fa-solid fa-chevron-left card-arrow" id="ar-tt"></i>
     </a>
   </div>
-
   <footer class="fu d8"><span id="footer-txt"></span></footer>
 </div>
-
 <script>
 /* ══════════════════════
    TRANSLATIONS
@@ -396,14 +356,14 @@ const T = {
   ar: {
     dir:'rtl', lang:'ar', toggle:'English',
     tagline: 'نُقدِّم لضيوفنا أرقى أنواع الحلويات والمشروبات المختارة بعناية',
-    hoursLabel: 'يومياً من الساعة ٤:٠٠ مساءً حتى ١٢:٣٠ صباحاً',
+    hoursLabel: 'من الأحد إلى الأربعاء: من الساعة 4:00 مساءً إلى الساعة 12:00 منتصف الليل<br>من الخميس إلى السبت: من الساعة 4:00 مساءً إلى الساعة 1:00 صباحاً',
     status: {
       open:      'المحل مفتوح حالياً',
       closed:    'المحل مغلق حالياً',
       openSoon:  'يفتح أبوابه قريباً',
       closeSoon: 'يُغلق أبوابه قريباً',
     },
-    footer: 'جميع الحقوق محفوظة لـ Dippy Dip © 2025',
+    footer: 'جميع الحقوق محفوظة لـ Dippy Dip © 2026',
     arrow: 'fa-chevron-left',
     cards: {
       menu: { title:'قائمة الأصناف والمشروبات', sub:'تصفّح قائمتنا الكاملة'        },
@@ -416,14 +376,14 @@ const T = {
   en: {
     dir:'ltr', lang:'en', toggle:'العربية',
     tagline: 'We offer our guests the finest selection of sweets & beverages',
-    hoursLabel: 'Daily from 4:00 PM until 12:30 AM',
+    hoursLabel: 'Sun to Wed: 4:00 PM to 12:00 midnight<br>Thu to Sat: 4:00 PM to 1:00 AM',
     status: {
       open:      'Currently Open',
       closed:    'Currently Closed',
       openSoon:  'Opening Shortly',
       closeSoon: 'Closing Shortly',
     },
-    footer: 'All Rights Reserved © Dippy Dip 2025',
+    footer: 'All Rights Reserved © Dippy Dip 2026',
     arrow: 'fa-chevron-right',
     cards: {
       menu: { title:'Menu — Food & Beverages', sub:'Browse our full menu'            },
@@ -434,57 +394,62 @@ const T = {
     }
   }
 };
-
 let lang = 'ar';
-
 /* ── cookies ── */
 const setCookie = (n,v,d)=>{ const e=new Date(); e.setTime(e.getTime()+d*864e5); document.cookie=`${n}=${v};expires=${e.toUTCString()};path=/`; };
 const getCookie = n=>document.cookie.split(';').map(c=>c.trim()).find(c=>c.startsWith(n+'='))?.split('=')[1]||null;
-
 /* ══════════════════════
    OPEN / CLOSED LOGIC
-   Opens:  16:00 (4 PM)
-   Closes: 00:30 (12:30 AM next day)
+   Regular days (Sun–Wed): 16:00 (4 PM)  → 00:00 (midnight)
+   Weekend (Thu, Fri, Sat): 16:00 (4 PM) → 01:00 (1 AM next day)
    "soon" window = 30 min
 ══════════════════════ */
 function getStatus() {
   const now  = new Date();
   const mins = now.getHours() * 60 + now.getMinutes();
-  const OPEN  = 16 * 60;   // 960  → 4:00 PM
-  const CLOSE = 0  * 60 + 30; // 30 → 12:30 AM
+  const dow  = now.getDay(); // 0=Sun ... 6=Sat
+  const weekendDays = [4, 5, 6]; // Thu, Fri, Sat
+  const OPEN  = 16 * 60;  // 960  → 4:00 PM
   const SOON  = 30;
+  const CLOSE_REGULAR = 0;  // midnight
+  const CLOSE_WEEKEND = 60; // 1:00 AM
 
-  // Is it currently open?
-  // Open window: mins >= 960  OR  mins < 30
-  const isOpen = mins >= OPEN || mins < CLOSE;
+  const isTodayWeekend     = weekendDays.includes(dow);
+  const yesterdayDow       = (dow + 6) % 7;
+  const isYesterdayWeekend = weekendDays.includes(yesterdayDow);
 
-  if (isOpen) {
-    // closing soon? last 30 min = after 23:30 OR before 00:30
-    const nearClose = mins >= (24 * 60 - SOON) || mins < CLOSE;
-    if (nearClose) return 'closeSoon';
-    return 'open';
+  if (mins >= OPEN) {
+    // Shift started earlier today (4 PM onward)
+    if (isTodayWeekend) {
+      // Closes 1 AM tomorrow — not near closing yet during evening hours
+      return 'open';
+    }
+    // Regular day: closes at midnight tonight
+    const nearClose = mins >= (24 * 60 - SOON);
+    return nearClose ? 'closeSoon' : 'open';
   } else {
-    // opening soon? 30 min before 4 PM
+    // Before 4 PM — check if still within yesterday's overnight extension
+    if (isYesterdayWeekend && mins < CLOSE_WEEKEND) {
+      const nearClose = mins >= (CLOSE_WEEKEND - SOON);
+      return nearClose ? 'closeSoon' : 'open';
+    }
+    // Regular-day shifts end exactly at midnight, no extension
     if (mins >= OPEN - SOON && mins < OPEN) return 'openSoon';
     return 'closed';
   }
 }
-
 function updateStatus(t) {
   const key    = getStatus();
   const badge  = document.getElementById('status-badge');
   const label  = document.getElementById('status-text');
   const sub    = document.getElementById('hours-sub');
-
   badge.className = 'status-badge';
   if (key === 'open')      badge.classList.add('open');
   else if (key === 'closed') badge.classList.add('closed');
   else                       badge.classList.add('soon');
-
   label.textContent = t.status[key];
-  sub.textContent   = t.hoursLabel;
+  sub.innerHTML     = t.hoursLabel;
 }
-
 /* ══════════════════════
    APPLY LANGUAGE
 ══════════════════════ */
@@ -493,13 +458,10 @@ function apply(code) {
   const t = T[code];
   document.documentElement.lang = t.lang;
   document.documentElement.dir  = t.dir;
-
   document.getElementById('tagline').textContent    = t.tagline;
   document.getElementById('lang-btn').textContent   = t.toggle;
   document.getElementById('footer-txt').textContent = t.footer;
-
   updateStatus(t);
-
   ['menu','map','wa','ig','tt'].forEach(k => {
     document.getElementById(`l-${k}`).textContent = t.cards[k].title;
     document.getElementById(`s-${k}`).textContent = t.cards[k].sub;
@@ -508,34 +470,29 @@ function apply(code) {
     arr.classList.add(t.arrow);
   });
 }
-
 function setLang(code) {
   setCookie('dippy_lang', code, 365);
   apply(code);
   document.getElementById('splash').classList.add('gone');
   setTimeout(()=> document.getElementById('site').classList.add('on'), 380);
 }
-
 function toggleLang() {
   const next = lang === 'ar' ? 'en' : 'ar';
   setCookie('dippy_lang', next, 365);
   apply(next);
 }
-
 /* ══════════════════════
    INIT
 ══════════════════════ */
 window.addEventListener('DOMContentLoaded', () => {
   // hide loader after fonts settle
   setTimeout(() => document.getElementById('loader').classList.add('gone'), 700);
-
   const saved = getCookie('dippy_lang');
   if (saved) {
     apply(saved);
     document.getElementById('splash').classList.add('gone');
     setTimeout(()=> document.getElementById('site').classList.add('on'), 50);
   }
-
   // refresh status every minute
   setInterval(() => updateStatus(T[lang]), 60000);
 });
